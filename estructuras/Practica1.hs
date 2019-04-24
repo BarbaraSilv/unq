@@ -11,7 +11,7 @@ module Practica1 where
 -- 
 
 --recorrido [] = ...
---recorrido (x:xs) = ... recorrido xs //// (x:xs) == Deconstruccion de Tipos
+--recorrido (x:xs) = ... recorrido xs //// (x:xs) == Recursion Estructural
 
 --maximo :: [Int] -> [Int]
 --maximo (x:[]) = x
@@ -40,6 +40,7 @@ lsBool = [True,True,False,False]
 
 lsParNum :: [(Int,Int)]
 lsParNum = [(1,1),(2,2),(3,3)]
+
 
 -- /////////////////////
 
@@ -107,7 +108,7 @@ tail' = tail
 
 sumatoria :: [Int] -> Int
 sumatoria [] = 0
-sumatoria ls = (head ls) + sumatoria (tail ls) --NO VA MASSSS
+sumatoria (x:xs) = x + sumatoria xs --NO VA MASSSS
 
 sum' :: [Int] -> Int
 sum' [] = 0
@@ -195,7 +196,7 @@ longitudMayorA  n (x:xs) =
 --longitudMayorA' :: Int -> [a] -> [a]    
 --longitudMayorA' n ls = if longitud ls > n then ls else [] --Lo pude hacer con deconstruccion/recurs. estructural!! obsoleto
 
-intercalar :: a -> [a] -> [a] --Ubica e entremedio de TODOS los ELEMENTOS de xs
+intercalar :: a -> [a] -> [a] --Ubica a entremedio de TODOS los ELEMENTOS de xs
 -- Ej intercalar ',' "abcde" --> "a,b,c,d,e"
 intercalar _ [] = []   
 intercalar e (x:xs) = x:e:( if (longitud xs) > 1 then intercalar e xs else xs ) --le faltaba un parametro a intercalar
@@ -278,20 +279,35 @@ contarHasta n = contarHasta(n-1) ++ [n]
 
 replicarN :: Int -> a -> [a] --devuelve una lista de "e" con n elementos
 replicarN 0 _ = []
-replicarN n e = [e] ++ replicarN (n-1) e
+replicarN n e = e : replicarN (n-1) e 
 
-desdeHasta :: Int -> Int -> [Int] --devuelve lista de numeros de n a m
+--replicarN :: Int -> a -> [a]
+--replicarN 0 e = []
+--replicarN n e = if n <= 0 then replicarN n e
+--                        else e : replicarN (n-1) e
+
+--desdeHasta :: Int -> Int -> [Int] --devuelve lista de numeros de n a m
 --desdeHasta (n - m) (m - n) = []
 --SI PONGO LOS NUMEROS AL REVES SE ROMPE TODO!! OJO!!
-desdeHasta n m = if n-1 /= m then [n] ++ desdeHasta (n+1) m else []
+--desdeHasta n m = if n-1 /= m then n : desdeHasta (n+1) m else []
+
+
+desdeHasta :: Int -> Int -> [Int] --devuelve lista de numeros de n a m
+desdeHasta n m = if n == m 
+        then m : []
+        else n : desdeHasta (n+1) m
+
 
 takeN :: Int -> [a] -> [a]
 takeN _ [] = []
-takeN n (x:xs) = if n > 0 then x:takeN (n-1) xs else []
+--takeN n (x:xs) = if n > 0 then x:takeN (n-1) xs else [] Otra forma para resolverlo, con un pattern match. más
+takeN 0 xs = xs
+takeN n (x:xs) = x : takeN (n-1)  xs
 
 dropN :: Int -> [a] -> [a]
 dropN _ [] = []
-dropN n (x:xs) = if n > 0 then dropN (n-1) xs else (x:xs)
+dropN 0 xs = xs
+dropN n (x:xs) = dropN (n-1) xs
 
 splitN :: Int -> [a] -> ([a],[a])
 --Devuelve una par con una lista que resulta de aplicar dropN y otra lista que resulta takeN
@@ -337,7 +353,6 @@ interseccion (x:xs) ys = if pertenece x ys then x : interseccion xs ys else inte
 diferencia :: Eq a => [a] -> [a] -> [a]
 -- primera lista - segunda lista = return
 diferencia [] _ = []
---diferencia [a] _ = [a]
 diferencia (x:xs) ys = if pertenece x ys then diferencia xs ys else x : diferencia xs ys
 
 particionPorParidad :: [Int] -> ([Int], [Int])
@@ -369,17 +384,17 @@ subtails :: [a] -> [[a]]
 subtails [] = [[]]
 subtails (x:xs) = (x:xs) : subtails xs
 
-agrupar :: Eq a => [a] -> [[a]] -- <??????????> <??>
---Ej [1,1,2,3,3,3] --> [[1,1],[2],[3,3,3]]
-agrupar [] = [[]]
-agrupar [a] = [[a]]
---agrupar (x:plagio) = if x == head plagio 
---                then ((head (agrupar plagio)) ++ [x]) : (tail (agrupar plagio))
---                else [x] : (agrupar plagio)
-
-agrupar (x:y:ls) = if x == y -- <??> POR QUE NO FUNCIONA???
-    then [x] ++ [y] : agrupar ls
-    else [x] : agrupar ls
+--agrupar :: Eq a => [a] -> [[a]] -- <??????????> <??>
+----Ej [1,1,2,3,3,3] --> [[1,1],[2],[3,3,3]]
+--agrupar [] = [[]]
+--agrupar [a] = [[a]]
+----agrupar (x:plagio) = if x == head plagio 
+----                then ((head (agrupar plagio)) ++ [x]) : (tail (agrupar plagio))
+----                else [x] : (agrupar plagio)
+--
+--agrupar (x:y:ls) = if x == y
+--    then [x] ++ [y] : agrupar ls
+--    else [x] : agrupar ls
 
 
 --No puedo meter una func. recursiva entre [], porque sino pasa algo tipo: [[1], [[[[[[2]]]]]] ]
@@ -399,3 +414,14 @@ esSufijo [] [] = True
 esSufijo [] _ = True
 esSufijo _ [] = False
 esSufijo xs ys = last xs == (last ys) && esSufijo (init xs) (init ys) 
+
+
+sacarMinimo :: Ord a => [a] -> [a]
+--Si el minimo aparece mas de una vez, sacar primer aparicion, no sacar todas las apariciones
+--Osea no se puede resolver usando filtrarElemento
+sacarMinimo [] = []
+sacarMinimo [a] = [a]
+sacarMinimo (x:xs) = if x == (minimum' (x:xs)) then xs else sacarMinimo xs
+
+
+
