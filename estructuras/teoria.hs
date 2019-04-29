@@ -101,27 +101,6 @@ reponerMC (MC a c l money) = MC 100 100 100 money
 -- a c l money deben ser >= 0 
 -- La implementacion de la interfaz debe ser consistente al constructor que elegi (y tambien el orden de los valores dentro del constructor)
 
-----------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------
-
------ E F I C I E N C I A A A A A A A A H H H H H / C O M P L E J I D A D
-
-----------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------
-
--- (1) Medir la cantidad de recursos que usa el programa
--- Memoria
--- Espacio
--- Red/Banda ancha
--- Consumo de energia (bateria)
--- Procesador (tiempo) <------- BIG O
-
-
-
-
 
 ----------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------
@@ -140,6 +119,7 @@ isEmptyS :: Stack a -> Bool --Me dice si esta vacia. O(1)
 push :: a -> Stack a -> Stack a --Agrega elem. O(1)
 pop :: Stack a -> Stack a --Prec: not isEmptyS. Saca un elem. O(1)
 top :: Stack a -> a --Prec: not isEmptyS. --Devuelve el elemento arriba de todo (el ultimo) O(1)
+
 
 data Stack a = Vacia | Meter a (Stack a)
 
@@ -174,3 +154,163 @@ removeSet :: a -> Set a -> Set a  --O(n)
 sizeSet :: Set a -> Int --O(n) 
 unionSet :: Set a -> Set a -> Set a --O(n*n)?
 intersectionSet :: Set a -> Set a -> Set a --O(n*n)?
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+---------------------------  O T R O - E J E M P L O
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+-- Cómo medir eficiencia??
+
+-- 1) Monitor / Profiling
+-- Recursos de memoria y CPU 
+
+-- 2) Tiempo (cuánto tarda) / Benchmark 
+-- Comparando máquinas con diferentes recursos 
+
+-- 3) Codigo Alto/Bajo
+-- Cuantas operaciones a lo largo del tiempo
+
+-- Vamos a medir eficiencia de codigo de alto nivel con Big O, cuántas operaciones con diferentes tamaños de párametro
+
+
+-- 3 COSAS A TENER EN CUENTA AL IMPLEMENTAR ALGO:
+--Eficiencia (La mejor: Caso 1 o Caso 3 (safa))
+--Facilidad de uso/Mantenimiento (La mejor: Caso )
+--Facilidad de implementacion (La mejor: Caso 2)
+
+---////////////////////////// PRIMER CASO
+
+data Color = Rojo | Verde | Azul | Negro 
+
+data Celda = MkC Int Int Int Int 
+
+-- constante, O(1)
+celdaVacia :: Celda 
+celdaVacia = MkC 0 0 0 0 
+
+-- constante, O(1)
+poner :: Color -> Celda -> Celda
+poner Rojo (MkC n1 n2 n3 n4) = n1+1
+poner Azul (MkC n1 n2 n3 n4) = n2+1
+poner Verde (MkC n1 n2 n3 n4) = n3+1
+poner Negro (MkC n1 n2 n3 n4) =  n4+1
+
+
+-- constante, O(1)
+sacar :: Color -> Celda -> Celda 
+sacar Rojo (MkC n1 n2 n3 n4) = n1-1
+sacar Azul (MkC n1 n2 n3 n4) = n2-1
+sacar Verde (MkC n1 n2 n3 n4) = n3-1
+sacar Negro (MkC n1 n2 n3 n4) =  n4-1
+
+-- constante, O(1)
+nroBolitas :: Color -> Celda -> Int 
+nroBolitas Rojo (MkC n1 n2 n3 n4) = n1
+nroBolitas Azul (MkC n1 n2 n3 n4) = n2
+nroBolitas Verde (MkC n1 n2 n3 n4) = n3
+nroBolitas Negro (MkC n1 n2 n3 n4) =  n4
+
+
+-- lineal, O(n), n el tamaño del numero del parametro
+ponerN :: Int -> Color -> Celda -> Celda 
+ponerN n c celda = celda 
+ponerN n c celda = poner c (ponerN (n-1) c celda) 
+
+
+-- constante, O(1)
+ponerN' :: Int -> Color -> Celda -> Celda 
+ponerN' cant Rojo (MkC n1 n2 n3 n4) = (MkC (n1+cant) n2 n3 n4)
+ponerN' cant Azul (MkC n1 n2 n3 n4) = (MkC n1 (n2+cant) n3 n4)
+ponerN' cant Verde (MkC n1 n2 n3 n4) = (MkC n1 n2 (n3+cant) n4)
+ponerN' cant Negro (MkC n1 n2 n3 n4) = (MkC n1 n2 n3 (n4+cant))
+
+
+
+-- constante, O(1)
+hayBolitas :: Color -> Celda -> Bool 
+hayBolitas Rojo (MkC n _ _ _) = n > 0
+hayBolitas Azul (MkC _ n _ _) = n > 0
+hayBolitas Verde (MkC _ _ n _) = n > 0
+hayBolitas Negro (MkC _ _ _ n) = n > 0
+
+
+---////////////////////////// OTRA IMPLEMENTACION MÁS FACIL DE MANTENER (porque si quiero agregr 40 colores la anterior es una cagada)
+
+data Celda = MkC [Color] deriving (Show, Eq)
+
+-- O(1)
+celdaVacia :: Celda
+celdaVacia = MkC = [] 
+
+-- O(n) n = el tamaño de xs (la lista)
+nroBolitas :: Color -> Celda -> Int
+nroBolitas c (MkC xs) = apariciones c xs 
+
+-- O(1)
+poner :: Color -> Celda -> Celda
+poner c (MkC xs) = MkC (c:xs)
+
+-- O(n)
+sacar :: Color -> Celda -> Celda 
+sacar c (MkC xs) = MkC (remove c xs)
+
+-- O(n)
+remove :: a -> [a] -> [a]
+remove c [] = []
+remove c (x:xs) =
+    if c == x then xs else x: remove c xs 
+
+--O(n), depnde de nroBolitas que depende de apariciones que es O(n)
+hayBolitas :: Color -> Celda -> Bool 
+hayBolitas c celda = nroBolitas c celda > 0
+
+
+
+---////////////////////////// OTRA IMPLEMENTACION
+
+data Celda = [(Color, Int)]
+
+-- ESTO SE LLAMA LIST COMPREHENSION
+-- O(1)
+celdaVacia = MkC [ (c, 0) <- colores]
+
+
+-- O(1)
+nroBolitas :: Color -> Celda -> Int 
+--Recorro la lista de colores, que es constante 
+
+-- O(1)
+poner :: Color -> Celda -> Celda
+--Recorro la lista de colores, que es constante 
+
+-- O(1)
+sacar :: Color -> Celda -> Celda 
+--Recorro la lista de colores, que es constante 
+
+hayBolitas :: Color -> Celda -> Bool 
+
+
+
+Privatizar Funciones // Crear Interfaz
+
+module Celda1 (sacar,poner,hayBolitas,celdaVacia) -> En un archivo nuevo que importe estas, nomás puedo usar estas, todas las demás están ocultas
+
+Que me permite hacer un modulo?
+- Ocultar codigo 
+- Ocultar implementacion (Caja Negra)
+- Biblioteca (conjunto de funciones y tipos)
+- Abstraccion 
+
+El implementacion deberia decirme cuanto cuestan las funciones que están dentro de la caja negra 
+
+Si dos modulos tienen la misma inerfaz pirdo cambiar la implementavion sin tener que tocar codigo ya implementado como usuario 
+(Polimorfismo paramétrico) -> El polimorfismo acá 
+(Polimorfismo ad-hoc : de ese solo objeto) -> El polimorfismo del paradigma de objetos
+
+Tradeoff -> Cuando elijo una implementacion sobre otra (ej. sacrifico eficiencia por implementacion)
+
+
+consejo: No pensar en eficiencia hasta que sea necesario, pensar primero en facilidad de implementacion
+
