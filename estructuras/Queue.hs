@@ -30,7 +30,7 @@ firstQ (Q (x:xs)) = x
 
 
 
---O(1)-
+--O(1)--
 dequeue :: Queue a -> Queue a
 dequeue (Q x:xs) = Q xs
 
