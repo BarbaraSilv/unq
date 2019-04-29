@@ -7,7 +7,7 @@ data Grupo = Vacio
             | Becario Nombre [Paper] | Investigador Nombre [Paper] Grupo Grupo Grupo deriving (Show)
 
 
---
+-----
 
 --autores --autores de un Paper :: Paper -> Conicet -> [Nombre]
 
