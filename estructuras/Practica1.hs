@@ -337,11 +337,12 @@ ordenar [] = []
 -- sacando el minimum
 ordenar ls = minimum' ls : ordenar (filtrarElemento (minimum' ls) ls)
 
+--O(n2)
 interseccion :: Eq a => [a] -> [a] -> [a]
 --Devuelve una lista que es la interseccion de dos listas
 --Ej: [1,2,3,4] [3,4,5,6] --> [3,4]
 interseccion [] _ = []
-interseccion [a] _ = [a]
+--interseccion [a] _ = [a]
 interseccion (x:xs) ys = if pertenece x ys then x : interseccion xs ys else interseccion xs ys
 
 --[1,2,3,4] [3,4,5,6]
