@@ -23,14 +23,25 @@ isEmptyStack :: Stack a -> Bool
 isEmptyStack (S xs _ _) = null xs
 
 
+
 --O(n)
 push :: Ord a => a -> Stack a -> Stack a
-push x (S xs int lsMax) = (S (x:xs) (int+1) (maximum x (head lsMax)))
+push x (S xs int lsMax) = (S (x:xs) (int+1)  actualizarMax x lsMax )
+
+--O(n)
+actualizarMax :: Ord a => a -> [a] -> [a]
+actualizarMax e [] = [e]
+actualizarMax e xs = if e > head xs 
+    then e : xs
+    else actualizarMax e xs
+
+[2,5,1] [3]
+
 
 
 --O(1)
 pop :: Stack a -> Stack a
-pop (S (xs) int lsMax) = S (tail xs) int-1
+pop (S (xs) int lsMax) = S (tail xs) int-1 (tail lsMax)
 
 
 --O(1)

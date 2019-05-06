@@ -2,8 +2,9 @@
 module Queue where
 import Stack
 
-data Queue a = Q (Stack a) (Stack a) deriving Show
+data Queue a = Q (Stack a) (Stack a) Int deriving Show
 -- Inv. de representacion: Explicacion de por que el Queue esta hecho con dos Stack
+-- Int es la longitud del Queue
 
 
 --O(1)
@@ -19,25 +20,24 @@ isEmptyQ _ = False
 
 --O(n)
 enqueue :: a -> Queue a -> Queue a
-enqueue x (Q xs) = Q (xs++[x])
+enqueue x (Q xs n) = Q (xs++[x])
 
 
 --O(1)
 firstQ :: Queue a -> a
-firstQ (Q (x:xs)) = x
+firstQ (Q (x:xs) n) = x
 
 
 
 --O(1)--
 dequeue :: Queue a -> Queue a
-dequeue (Q x:xs) = Q xs
+dequeue (Q x:xs n) = Q xs
 
 
 
 -- O(1)
 lenQ :: Queue a -> Int -- Longitud
-lenQ (Q []) = 0
-lenQ (Q (x:xs)) = 1 + lenQ (Q xs)
+lenQ (Q _ n) = n
 
 
 

@@ -33,14 +33,20 @@ losQuePertenecen :: Eq a => [a] -> Set a -> [a]
 losQuePertenecen ls (Set xs) = interseccion ls (setToList (Set xs))
 
 
+
+
 -- O(n)
 sinRepetidos :: Eq a => [a] -> [a]
 sinRepetidos xs = setToList (listToSet xs)
 
 
+
+
 listToSet :: [a] -> Set a
 listToSet [] = emptyS
 listToSet (x:xs) = addS x (listToSet xs)
+
+
 
 
 --O(n) n cantidad de nodos
