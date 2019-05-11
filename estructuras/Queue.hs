@@ -1,47 +1,53 @@
 
 module Queue where
-import Stack
+import StackSimple
 
 data Queue a = Q (Stack a) (Stack a) Int deriving Show
--- Inv. de representacion: Explicacion de por que el Queue esta hecho con dos Stack
--- Int es la longitud del Queue
+-- Inv. de representacion: Int es la longitud del Queue.
+-- fs=front Stack, bs=back stack, quitaremos elementos a traves de fs y los agregaremos a traves de bs.
+-- Si fs se encuentra vacia, entonces el Queue esta vacio.
+-- fs y bs tienen mismos elementos pero ordenados al reves (orden O(n) amortizado (CON UN REVERSE NUEVO PARA STACK))
+--Si hago enqueue y fs esta vacia, entonces agrego elem. en fs. Sino lo agrego en bs.
 
 
 --O(1)
 emptyQ :: Queue a --Crea una cola vacía.
-emptyQ = Q []
+emptyQ = (Q ( (S [] 0) (S [] 0) ) 0)
 
 
 --O(1)
 isEmptyQ :: Queue a -> Bool
-isEmptyQ [] = True
-isEmptyQ _ = False
+isEmptyQ (Q (S [] 0) bs) _ = True
+isEmptyQ _ _ = False
 
 
---O(n)
+--O(1) push O(1)
 enqueue :: a -> Queue a -> Queue a
-enqueue x (Q xs n) = Q (xs++[x])
+enqueue x (Q fs bs n) = if isEmptyStack fs
+    then Q (push x fs) bs n+1
+    else Q fs (push x bs) n+1
 
 
---O(1)
-firstQ :: Queue a -> a
-firstQ (Q (x:xs) n) = x
-
-
-
---O(1)--
+--O(1) amortizado 
 dequeue :: Queue a -> Queue a
-dequeue (Q x:xs n) = Q xs
+dequeue x (Q fs bs n) = if lenStack fs == 1
+    then Q (pop (reverse' bs)) [] n-1 
+    else Q (pop fs) bs n-1
 
+-- Lo doy vuelta porque sino me esta sacando elementos como si fuera un stack, pero no es un stack,
+-- es un queue
+
+-- O(n^2)
+reverse' :: Stack a -> Stack a
+reverse' [] = []
+reverse' (x:xs) = reverse' xs ++ [x]
+
+
+--O(1) prec: Al menos un elemento
+firstQ :: Queue a -> a
+firstQ (Q fs bs n) = top fs
 
 
 -- O(1)
 lenQ :: Queue a -> Int -- Longitud
-lenQ (Q _ n) = n
-
-
-
---Implemente la interfaz de Queue pero en lugar de una lista utilice dos stack.
---La estructura funciona de la siguiente manera. Llamemos a una de las stack fs (front stack) y a la otra bs(back stack). 
---Quitaremos elementos a través de fs y agregaremos a través de bs, pero todas las operaciones deben garantizar el siguiente invariante de representación: 
---Si fs se encuentra vacía, entonces la cola se encuentra vacía. ¿Qué ventaja tiene esta representación de Queue con respecto a la de listas?
+lenQ (Q fs bs n) = n
