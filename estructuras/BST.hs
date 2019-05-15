@@ -1,8 +1,8 @@
 module BST where
 
-    -- <??> Cual es el datatype de esto????? porque a las funcinoes no les puedo pasar un BST, les paso un Tree
-data Tree a = Nil | Bin a (BST a) (BST a) deriving Show
-data BST a = B (Tree a) deriving Show
+data Tree a = Nil | Bin a (Tree a) (Tree a) deriving Show
+-- data BST a = B (Tree a) deriving Show
+--inv. rep: Tree es un BST
 --inv. rep: -- Un arbol es un BST si:
 -- Todos los elem. del subarbol izq. son todos elem. mas chicos que la raiz
 -- Todos los elem. del subarbol der. son elem. mas grandes que la raiz

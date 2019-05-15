@@ -40,8 +40,12 @@ dequeue x (Q fs bs n) = if lenStack fs == 1
 
 -- O(n^2)
 reverse' :: Stack a -> Stack a
-reverse' [] = []
-reverse' (x:xs) = reverse' xs ++ [x]
+reverse' (S (xs)) = S (reverse'' xs)
+
+-- O(n^2)
+reverse'' :: [a] -> [a]
+reverse'' [] = []
+reverse'' (x:xs) = reverse'' xs ++ [x] 
 
 
 --O(1) prec: Al menos un elemento

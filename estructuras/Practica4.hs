@@ -108,7 +108,7 @@ apilar (x:xs) (S ys n lsMax) = push x (apilar xs (S ys n lsMax) )
 --O(n2) recursion de desapilar + pop
 desapilar :: Stack a -> [a] 
 desapilar emptyStack = []
-desapilar (S ys n lsMax) = top (S ys n lsMax) : desapilar (pop (S ys n lsMax))
+desapilar (stack) = top (stack) : desapilar (pop (stack))
 
 --O(n2) 
 treeToStack :: Tree a -> Stack a -- Dado un árbol devuelve una pila con los elementos apilados in order.

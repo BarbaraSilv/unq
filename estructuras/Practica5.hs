@@ -1,19 +1,19 @@
 import MapSinRep -- emptyM, assocM (agregar), lookupM (buscar TOTAL, devuelve Just value/nothing), deleteM (borrar PARCIAL), domM ([keys])
 import MapConRep 
-import MapConList -- <??> puede tener claves repetidas o no?
-import MapOrdenado -- <??> puede tener claves repetidas o no?
+import MapConList -- puede tener claves repetidas o no? como yo quiera
+import MapOrdenado -- puede tener claves repetidas o no? como yo quiera
 
-import Celda -- WIP <??>
+import Celda -- WIP 
 
-import Multiset -- WIP <??>
-import MultisetMap -- WIP <??>
+import Multiset --
+import MultisetMap --
 
-import BST -- <??> Todas las funciones se hacen como si fuera el implementador? No hay ninguna como si fuera el usuario?
+import BST -- Todas las funciones se hacen como si fuera el implementador? SI
 import MapBST -- WIP
 import SetBST -- WIP
 
-import Heap -- WIP <??> heapSort la implemento como si fuera un usuario o como si fuera el implementador?
-import HeapBST -- WIP <??> Invariantes de binaryHeap? (ver practica)
+import Heap -- WIP heapSort la implemento como si fuera un usuario o como si fuera el implementador? SI
+import HeapBST -- WIP Invariantes de binaryHeap? Invariantes del AVL (ver Wikipedia: binaryHeap)
 
 
 
@@ -73,12 +73,11 @@ agregarMap :: Eq k => Map k v -> Map k v -> Map k v
 -- agregar claves y valores del primer map en el segundo. Si ya existe la clave, la reemplaza
 agregarMap map1 map2 = agregarMap' (domM map1) map2 
 
--- <??> Puedo extender la interfaz del Map para resolver este? implementar un imgM o algo que me de la lista
---de valores del Map. 
+-- Puedo extender la interfaz del Map para resolver este? implementar un imgM o algo que me de la lista
+--de valores del Map. NO SE PUEDE
 --Si no se puede, hay que tomar map1, lookup el k (que no se encuentra en map2) para tomar el valor
 --que va dentro del assocM del then para poder ingresarlo (antes convertir Just v en v).
---O(n2) ¿amortizado? --<??> a veces va a hacer assoc delete agregarMap, haciendo que empeore la eficiencia, 
---pero no siempre
+--O(n2) ¿amortizado? Si, existe, pero es mas probable que me cruce con un log en lugar de un amortizado
 agregarMap' :: Eq k => [k] -> Map k v -> Map k v 
 agregarMap' [] _ = emptyM
 agregarMap' (k:lsKey) map2 = if lookupM map2 k == Nothing 
@@ -93,7 +92,8 @@ indexar (v:valores) = assocM (indexar valores) v n --ESTO SE RESUELVE CON LET, U
 
 ocurrencias :: String -> Map Char Int
 --Cuenta cuanto aparece cada letra del string, usando un Map 
---Ej. oso ---> (o,2) (s,1) (o,2), sansa ---> (s,2) (a,2) (n,1) (s,2) (a,2) <??> Asi?
+--Ej. oso ---> (o,2) (s,1) (o,2), sansa ---> (s,2) (a,2) (n,1) 
+
 ocurrencias [] = emptyM
 ocurrencias s:string = assocM (ocurrencias string) s n --ESTO SE RESUELVE CON LET, USANDO ALGUNA "VARIABLE" 
 --QUE CON CADA ITERACION HAGA LOOKUP DEL STRING ENTERO Y SE FIJE CUANTAS VECES APARECE
@@ -119,8 +119,9 @@ ponerN n color celda = ponerN (n-1) color (poner color celda)
 
 hayBolitasDeCadaColor :: Celda -> Bool 
 hayBolitasDeCadaColor celda = 
-    (hayBolitas Rojo celda) && (hayBolitas Azul celda) && (hayBolitas Negro celda) && (hayBolitas Verde celda)
--- <??> Esto se puede hacer??
+    -- (hayBolitas Rojo celda) && (hayBolitas Azul celda) && (hayBolitas Negro celda) && (hayBolitas Verde celda)
+-- Esto se puede hacer?? NO (segun nahuel), xq son constructores y no se que colores existen
+-- Resolver usando domM
 
 -- /////////////////////////////////////////////////////////
 -- /////////////////////////////////////////////////////////
@@ -130,4 +131,4 @@ hayBolitasDeCadaColor celda =
 
 ocurrencias :: String -> Map Char Int
 --Cuenta cuanto aparece cada letra del string, usando un Map 
---Ej. oso ---> (o,2) (s,1) (o,2), sansa ---> (s,2) (a,2) (n,1) (s,2) (a,2) <??> Asi?
+--Ej. oso ---> (o,2) (s,1) (o,2), sansa ---> (s,2) (a,2) (n,1) 

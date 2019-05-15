@@ -573,3 +573,44 @@ lookUp ((clave,valor):xs) key = if clave==key
 -- Ej: lookupM 3 --> Persona3
 
 Heap => BST pero con minTree en O(1)
+
+/// COLAS DE PRIORIDAD / HEAP 
+
+// Interfaz 
+
+
+vaciaCP :: CP a 
+
+
+escalar :: Ord a => a -> CP a -> CP a 
+
+
+proxima :: Ord a => CP a -> a 
+--Prec: tamaño > 0 
+
+
+desencolar :: Ord a => CP a > CP a 
+
+
+tamaño :: CP a -> Int 
+
+// Implementacion 
+
+data CP a => MkCP [a] Int deriving Show 
+
+// Estructura De Heap 
+
+data CP a = MkCP Int (Tree a) 
+
+data Tree a = Nil | Bin  a (Tree a) (Tree a)
+
+--Invariante: tiene dos partes:
+1) Orden - el elemento mas chico esta en la raiz, el hijo izq. es (recursivamente) un Heap y el derecho también 
+
+2) Balanceado - todos los niveles deben estar completos excepto quiza el ultimo 
+ ademas el arbol es "izquierdista", osea, el ultimo nivel se completa de izq. a der. 
+
+--Invariante: en MkCP n a, n es la cantidad de nodos del arbol
+
+
+

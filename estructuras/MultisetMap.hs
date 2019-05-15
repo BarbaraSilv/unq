@@ -1,25 +1,31 @@
 module MultisetMap where 
 import MapConRep
 
-data Multiset a = MS (Map Int a) deriving Show 
+fromJust :: Maybe a -> a 
+fromJust Nothing = Error
+fromJust (Just x) = x
+
+data Multiset a = MS (Map Int a) Int deriving Show 
 -- Inv. rep: Set pero con repetidos, cada elemento representado como un par (Int a), donde Int es la cantidad
 -- de apariciones del elemento
--- <??> Cual es el key y cual es el value??
+-- Segundo Int es la primera clave usada
+
+
 
 --O(1)
 emptyMS :: Multiset a 
-emptyMS = MS emptyM
+emptyMS = MS emptyM 0
 
 --O() -- Cuando agrego un elemento, me tengo que fijar si ese elemento ya existe en el
 -- MS para actualizar las ocurrencias
 addMS :: Ord a => a -> Multiset a -> Multiset a 
-addMS x (MS map) = assocM map x
+addMS x (MS map n) = MS (assocM map n x) n+1
+-- ESTO FUNCIONAaaaahh (te lo explico lautaro, acordate)
 
 --O()
 ocurrencesMS :: Ord a => a -> Multiset a -> Int 
 ocurrencesMS e (MS map) = last (lookupM map e) 
--- <??> 1. Resolver cual es el datatype de Multiset
--- 2. Como convierto un Just v en v?
+-- 2. Como convierto un Just v en v? usar fromJust
 
 --O()
 unionMS :: Ord a => Multiset a -> Multiset a -> Multiset a 

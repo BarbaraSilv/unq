@@ -11,13 +11,13 @@ emptyM = M []
 --O(1)
 assocM  :: Eq k =>  Map k v -> k -> v -> Map k v
 --Agregar clave
-assocM (M xs) key value = (M (key, value):xs) -- <??> se puede hacer esto?
+assocM (M xs) key value = (M (key, value):xs) -- se puede hacer esto? SI
 
 --O(n)
 lookupM :: Eq k =>  Map k v -> k -> Maybe v
 --Buscar valor con clave
 lookupM (M []) _ = Nothing
-lookupM (M ((k,v):xs)) key = if k==key -- <??> se puede hacer esto?
+lookupM (M ((k,v):xs)) key = if k==key -- se puede hacer esto? SI
     then Just v
 
 -- --O(n)

@@ -8,13 +8,19 @@ emptyM :: Map k v
 emptyM = M []
 
 --Como es sin repetidos, me tengo que fijar si ya existe. Lo puedo hacer o a lo bruto o con un Set. Yo lo voy a hacer a lo bruto.
--- <??> Si inserto uno que ya existe, se sobreescribe el valor? o no se inserta?
+-- Si inserto uno que ya existe, se sobreescribe el valor? SI
 --O(n)
 assocM  :: Eq k =>  Map k v -> k -> v -> Map k v
 --Agregar clave
 assocM (M xs) key value = if elem key (domM (M xs)) 
     then (M xs) 
     else (M (key,value):xs)
+
+assocM (M xs) k v = M (assocM' xs k v)
+
+assocM' :: Eq k => [(k,v)] -> k -> v -> [(k,v)]
+assocM' [] k v = [(k,v)]
+assocM' (x:xs) k v = <otra forma de hacer el assoc>
 
 --O(n)
 lookupM :: Eq k =>  Map k v -> k -> Maybe v

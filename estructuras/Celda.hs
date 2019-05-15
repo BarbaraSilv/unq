@@ -7,7 +7,8 @@ data Celda = MkC (Map Color Int) deriving Show
 
 --Inv Rep: existe una clave para cada color existente
 -- el valor asociado al color es un positivo
--- <??> cual es la clave y cual es el valor???
+-- Map guarda los 4 colores al mismo tiempo
+-- Los colores son las claves
 
 celdaVacia :: Celda 
 celdaVacia = MkC (emptyM)
