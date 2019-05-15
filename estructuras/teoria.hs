@@ -536,3 +536,40 @@ Solucion: doble rotacion.
     AVL-A  AVL-B     AVL-C     AVL-D
     (h)  (h ó h+1)   (h)?       (h)
 
+//////////////////////////////////////////////////////////////////
+//  M A P
+//////////////////////////////////////////////////////////////////
+
+
+type Persona = ?
+type Nombre = String
+type DNI = Int
+
+data Comunidad = C Tree (DNI, Persona) Tree (Nombre, Persona)
+--Inv. rep: Los dos arboles son BST (y AVL)
+--una persona esta representada en ambos arboles.
+--Organizar la info. en pares me sirve para hacer mapeos (uno para la key, otro para el value).
+
+--Aca ya se empieza a mezclar con BD, de la forma en la que puedo representar relaciones, nodos de grafos, etc.
+--Ej. Tree (Persona, Persona), donde hay dos personas con alguna relacion (ej. amigoDe)
+
+
+///////////////////////////////
+
+data Map = M [(k, v)] deriving show (implementacion 1)
+data Map = M [k] [v] deriving show (implementacion 2)
+data Map = M (Tree (k,v)) deriving show (implementacion 3) (BST) 
+
+// INTERFAZ
+
+--O(n)
+lookupM :: Eq k => [(k,v)] -> k -> Maybe v 
+--Dado una lista de pares (key, value), le paso un key y me dice su value
+lookUp [] _ = Nothing 
+lookUp ((clave,valor):xs) key = if clave==key 
+    then Just valor 
+    else lookUp xs key 
+
+-- Ej: lookupM 3 --> Persona3
+
+Heap => BST pero con minTree en O(1)

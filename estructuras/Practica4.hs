@@ -61,7 +61,7 @@ unirTodos (NodeT s ti td) = UnionS s (UnionS (unirTodos ti) (unitTodos td))
 
 --O(1)
 largoQ :: Queue a -> Int -- Cuenta la cantidad de elementos de la cola.
-largoQ (Q fs bs n) = lenQ (Q fs bs n)
+largoQ queue = lenQ queue
 
 
 --O(1)
@@ -142,7 +142,7 @@ stringToStack (x:xs) = if x=='('
 
 
 balanceadoConContar :: String -> Bool
-balanceadoConContar str = ((contarParentesis str)) `mod` 2) == 0
+balanceadoConContar str = contarLeftParentesis str == contarRightParentesis str
 
 contarLeftParentesis :: String -> Int
 contarLeftParentesis (x:xs) = if x=='(' 

@@ -21,6 +21,7 @@ isEmptyQ (Q (S [] 0) bs) _ = True
 isEmptyQ _ _ = False
 
 
+
 --O(1) push O(1)
 enqueue :: a -> Queue a -> Queue a
 enqueue x (Q fs bs n) = if isEmptyStack fs
