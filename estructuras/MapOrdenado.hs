@@ -1,4 +1,4 @@
-module MapSinRep where
+module MapOrdenado where
 
 data Map k v = M [(k, v)] deriving Show
 --Inv: ordenado de menor a mayor segun la clave

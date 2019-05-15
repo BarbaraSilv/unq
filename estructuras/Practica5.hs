@@ -3,8 +3,10 @@ import MapConRep
 import MapConList -- <??> puede tener claves repetidas o no?
 import MapOrdenado -- <??> puede tener claves repetidas o no?
 
-import Multiset -- WIP
-import MultisetMap
+import Celda -- WIP <??>
+
+import Multiset -- WIP <??>
+import MultisetMap -- WIP <??>
 
 import BST -- <??> Todas las funciones se hacen como si fuera el implementador? No hay ninguna como si fuera el usuario?
 import MapBST -- WIP
@@ -96,6 +98,29 @@ ocurrencias [] = emptyM
 ocurrencias s:string = assocM (ocurrencias string) s n --ESTO SE RESUELVE CON LET, USANDO ALGUNA "VARIABLE" 
 --QUE CON CADA ITERACION HAGA LOOKUP DEL STRING ENTERO Y SE FIJE CUANTAS VECES APARECE
 
+
+-- /////////////////////////////////////////////////////////
+-- /////////////////////////////////////////////////////////
+-- ///////////////////////////////////// C E L D A
+-- /////////////////////////////////////////////////////////
+-- /////////////////////////////////////////////////////////
+
+-- celdaVacia, poner (color celda), sacar (color celda), hayBolitas (color celda), nroBolitas (color celda)
+
+nroBolitasMayorA :: Color -> Int -> Celda -> Bool 
+--True si en la celda hay más bolitas de color que n
+nroBolitasMayorA color n celda = (nroBolitas color celda) > n
+
+
+ponerN :: Int -> Color -> Celda -> Celda 
+ponerN 0 _ celda = celda
+ponerN n color celda = ponerN (n-1) color (poner color celda)
+
+
+hayBolitasDeCadaColor :: Celda -> Bool 
+hayBolitasDeCadaColor celda = 
+    (hayBolitas Rojo celda) && (hayBolitas Azul celda) && (hayBolitas Negro celda) && (hayBolitas Verde celda)
+-- <??> Esto se puede hacer??
 
 -- /////////////////////////////////////////////////////////
 -- /////////////////////////////////////////////////////////
