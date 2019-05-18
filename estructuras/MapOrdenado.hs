@@ -9,13 +9,13 @@ emptyM :: Map k v
 emptyM = M []
 
 --Como es sin repetidos, me tengo que fijar si ya existe. Lo puedo hacer o a lo bruto o con un Set. Yo lo voy a hacer a lo bruto.
--- <??> Si inserto uno que ya existe, se sobreescribe el valor? o no se inserta?
+-- Si inserto uno que ya existe, se sobreescribe el valor
 
---O(n2) <??> es esto o O(n) amortizado?
+--O(n2) 
 assocM  :: Eq k =>  Map k v -> k -> v -> Map k v
 --Agregar clave
 assocM (M xs) key value = if elem key (domM (M xs)) 
-    then (M xs) 
+    then (M xs) --deberia sobreescribir el valor si lo encuentra, no lo completo porque paja y quiero seguir
     else assocOrdenado (M xs) key value
 
 --O(n2)
@@ -28,7 +28,7 @@ assocOrdenado (M (x:xs)) key value = if key < (fst x)
 lookupM :: Eq k =>  Map k v -> k -> Maybe v
 --Buscar valor con clave
 lookupM (M []) _ = Nothing
-lookupM (M ((k,v):xs)) key = if k==key -- <??> se puede hacer esto?
+lookupM (M ((k,v):xs)) key = if k==key
     then Just v
 
 -- --O(n)

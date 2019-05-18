@@ -1,18 +1,18 @@
 import MapSinRep -- emptyM, assocM (agregar), lookupM (buscar TOTAL, devuelve Just value/nothing), deleteM (borrar PARCIAL), domM ([keys])
-import MapConRep 
-import MapConList -- puede tener claves repetidas o no? como yo quiera
-import MapOrdenado -- puede tener claves repetidas o no? como yo quiera
+import MapConRep  -- <??> deleteM
+import MapConList -- Decidi que NO tenga repetidos xq si tengo [2,2] [a,b] y hago (deleteM map 2), cuál estoy borrando?
+import MapOrdenado -- Decidi que NO tenga repetidos y que assocM con una clave ya existente no pueda insertar
 
 import Celda -- WIP 
 
-import Multiset --
-import MultisetMap --
+import Multiset -- WIP
+import MultisetMap -- WIP
 
-import BST -- Todas las funciones se hacen como si fuera el implementador? SI
+import BST -- <??> deleteBST
 import MapBST -- WIP
 import SetBST -- WIP
 
-import Heap -- WIP heapSort la implemento como si fuera un usuario o como si fuera el implementador? SI
+import Heap -- WIP
 import HeapBST -- WIP Invariantes de binaryHeap? Invariantes del AVL (ver Wikipedia: binaryHeap)
 
 
@@ -46,11 +46,10 @@ actualizarClaves :: Eq k => [(k, v)] -> Map k v -> Map k v
 --Para cada clave, le cambio el valor que tiene en el Map (o no). Vale decir que
 --no necesariamente le paso todas las claves que existen en el Map.
 actualizarClaves [] map = map 
-actualizarClaves ((key, value):xs) = 
--- En el map qué pasa si inserto un (k,v) que en el map, el k ya existe? Pueden existir dos valores asociados
--- a una misma clave? si inserto un key con un value nuevo, sobreescribe al value anterior? <??>
+actualizarClaves ((key, value):xs) map = assocM (actualizarClaves xs map) key value
+-- En el map qué pasa si inserto un (k,v) que en el map, el k ya existe, se sobreescribe el valor
 
---O(n2)
+--O(n3)? <??> cubico?
 unirDoms :: Eq k => [Map k v] -> [k]
 unirDoms lsmap = sinRepetidos (unirDoms' lsmap)
 
@@ -132,3 +131,12 @@ hayBolitasDeCadaColor celda =
 ocurrencias :: String -> Map Char Int
 --Cuenta cuanto aparece cada letra del string, usando un Map 
 --Ej. oso ---> (o,2) (s,1) (o,2), sansa ---> (s,2) (a,2) (n,1) 
+
+
+-- /////////////////////////////////////////////////////////
+-- /////////////////////////////////////////////////////////
+-- ///////////////////////////////////// H E A P
+-- /////////////////////////////////////////////////////////
+-- /////////////////////////////////////////////////////////
+
+heapSort :: Ord a => [a] -> [a]

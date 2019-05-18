@@ -21,9 +21,12 @@ lookupM (M ((k,v):xs)) key = if k==key -- se puede hacer esto? SI
     then Just v
 
 -- --O(n)
-deleteM :: Eq k =>  Map k v -> k -> Map k v -- <??> Al querer testear me tira un error raro
---Borrar valor con clave. Prec: Existe
-deleteM (M (x:xs)) key = if (fst x)==key 
+deleteM :: Eq k =>  Map k v -> k -> Map k v
+--Borrar valor con clave. Prec: Existe -- <??> Como es este?????
+-- porque supongamos que tengo el siguiente map
+-- [ (1,a) (1,b) (1,c) (2,a) (3,a)] y le digo (deleteM 1). Cual estoy borrando? si quisiera borrar solo (1,c) 
+-- por ejemplo? o (1,b)?
+deleteM (M ((k,v):xs)) key = if k==key 
     then M xs
     else assocM x (deleteM xs key)
 

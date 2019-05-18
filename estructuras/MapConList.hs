@@ -4,19 +4,31 @@ data Map k v = M [k] [v] deriving Show
 --Inv: k se representa con lista de claves, v con lista de valores
 -- [k1,k2..kn] R [v1,v2..vn] (osea, k1 asoc. v1, k2 asoc. v2, etc)
 -- Ambas listas tienen la misma longitud
+
 --O(1)
 emptyM :: Map k v 
 --Devuelve map vacio
 emptyM = M [] []
 
---Como es sin repetidos, me tengo que fijar si ya existe. Lo puedo hacer o a lo bruto o con un Set. Yo lo voy a hacer a lo bruto.
--- Si inserto uno con una key que ya existe, se sobreescribe el valor
---O(n)
+--O(n2) Inserciones en el head de las listas
 assocM  :: Eq k =>  Map k v -> k -> v -> Map k v
---Agregar clave
-assocM (M xs ys) key value = if elem key ys
-    then (M xs ys) 
-    else (M (key:xs) (value:ys))
+--Agregar clave. Si ya existe, sobreescribe
+assocM (M xs ys) key value = if elem k xs 
+    then (M xs ys)
+    else M ((key:xs) (value:ys))
+
+--O(n)
+reemplazarValorM :: Eq k => Map k v -> k v -> Map k v 
+reemplazarValorM (M [] []) _ _ = emptyM
+reemplazarValorM (M (k:ks) (v:vs)) key value = if k==key 
+    then (M (k:ks) (value:vs))
+    else assocM' ((reemplazarValorM (M ks vs) key value) k v)
+
+--O(1) Agregar (v,k) en un map, sin fijarse si ya existe
+assocM'  :: Eq k =>  Map k v -> k -> v -> Map k v
+assocM' (M xs ys) key value = assocM' (M (key:xs) (value:ys))
+
+
 
 --O(n)
 lookupM :: Eq k =>  Map k v -> k -> Maybe v
