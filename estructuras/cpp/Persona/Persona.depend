@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1508799458 source:c:\users\agustina\desktop\ed\persona\main.cpp
+	<iostream>
+	"Persona.h"
+
+1508800014 "
+
+1508800570 source:c:\users\agustina\desktop\ed\persona\mascota.cpp
+	"Mascota.h"
+
+1508800446 c:\users\agustina\desktop\ed\persona\mascota.h
+	<iostream>
+
+1508800446 
+
+1508802650 source:c:\users\agustina\desktop\ed\persona\persona.cpp
+	"Persona.h"
+
+1508800014 c:\users\agustina\desktop\ed\persona\persona.h
+	<iostream>
+	"Mascota.h"
+
+1508800572 source:/home/leo/Desktop/unq/estructuras/cpp/Persona/Mascota.cpp
+	"Mascota.h"
+
+1508800448 /home/leo/Desktop/unq/estructuras/cpp/Persona/Mascota.h
+	<iostream>
+
+1508802652 source:/home/leo/Desktop/unq/estructuras/cpp/Persona/Persona.cpp
+	"Persona.h"
+
+1508800016 /home/leo/Desktop/unq/estructuras/cpp/Persona/Persona.h
+	<iostream>
+	"Mascota.h"
+

@@ -11,6 +11,10 @@ data Tree a = Nil | Bin a (Tree a) (Tree a) deriving Show
 
 -- Todas tienen eficiencia O(log n)
 
+isEmptyBST :: Tree a -> Bool 
+isEmptyBST Nil = True 
+isEmptyBST _ = False
+
 perteneceBST :: Ord a => a -> Tree a -> Bool
 perteneceBST e Nil = False
 perteneceBST e (Bin x ti td) = e==x || if e > x 
@@ -47,11 +51,17 @@ deleteBST :: Ord a => a -> Tree a -> Tree a
 deleteBST e Nil = Nil 
 deleteBST e (Bin x Nil Nil) = if e==x then Nil else (Bin x Nil Nil)
 deleteBST e (Bin x ti td) = if e == x
-    then 
-        
+    then removeRoot (Bin x ti td)
     else if e > x 
-        then deleteBST e td 
-        else deleteBST e ti
+        then (Bin x ti (deleteBST e td)) 
+        else (Bin x (deleteBST e ti) td)
+
+
+removeRoot :: Tree a -> Tree a 
+--Prec: not Nil
+removeRoot (Bin x ti td) = if isEmptyBST td 
+    then ti 
+    else let (y,td') splitMinBST td in (Bin y ti td')
 
 
 
@@ -90,9 +100,13 @@ elMaximoMenorA e (Bin x ti td) = if e==x
         then elMaximoMenorA e ti 
         else elMaximoMenorA e td
 
+
+
                 -- 60
             -- 40       70
         -- 30    50   65   75
+
+
 
 -- <??> Esta bien?
 elMinimoMayorA :: Ord a => a -> Tree a -> Maybe a

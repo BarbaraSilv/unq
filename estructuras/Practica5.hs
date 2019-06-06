@@ -35,7 +35,6 @@ buscarClaves (key:lsKey) map = if elem key (domM map)
     else buscarClaves lsKey map 
 
 
-
 --O(n2)
 estanTodas :: Eq k => [k] -> Map k v -> Bool 
 estanTodas [] _ = True 
@@ -68,9 +67,10 @@ mapSuccM (k:lsKey) map =
     else assocM ( deleteM (mapSuccM lsKey map) k) k (lookupM map k)+1 -- <??> lookupM me convierte el v
     -- en Just v. Como revierto esto para poder resolver este? 
 
+
 agregarMap :: Eq k => Map k v -> Map k v -> Map k v 
 -- agregar claves y valores del primer map en el segundo. Si ya existe la clave, la reemplaza
-agregarMap map1 map2 = agregarMap' (domM map1) map2 
+agregarMap map1 map2 = agregarMap' (domM map1) map1 map2 
 
 -- Puedo extender la interfaz del Map para resolver este? implementar un imgM o algo que me de la lista
 --de valores del Map. NO SE PUEDE
@@ -79,7 +79,7 @@ agregarMap map1 map2 = agregarMap' (domM map1) map2
 --O(n2) ¿amortizado? Si, existe, pero es mas probable que me cruce con un log en lugar de un amortizado
 agregarMap' :: Eq k => [k] -> Map k v -> Map k v 
 agregarMap' [] _ = emptyM
-agregarMap' (k:lsKey) map2 = if lookupM map2 k == Nothing 
+agregarMap' (k:lsKey) map1 map2 = if lookupM map2 k == Nothing 
     then assocM (agregarMap' lsKey map2) k ¿v? 
     else assocM ( deleteM (agregarMap' lsKey map2) k) k ¿v? 
 
